@@ -59,15 +59,14 @@ const Feed = () => {
     setFilteredPosts(filtered);
   };
 
-  useEffect(() => {
-    const fetchPosts = async () => {
-      const response = await fetch("/api/prompt");
-      const data = await response.json();
-      console.log(data);
-      setPosts(data);
-      setFilteredPosts(data);
-    };
+  const fetchPosts = async () => {
+    const response = await fetch("/api/prompt");
+    const data = await response.json();
+    setPosts(data);
+    setFilteredPosts(data);
+  };
 
+  useEffect(() => {
     fetchPosts();
   }, []);
 
