@@ -28,6 +28,7 @@ const Navbar = () => {
           src="/assets/images/logo.svg"
           width={30}
           height={30}
+          alt="PromptDeck Logo"
           className="object-contain"
         />
         <p className="logo_text">PromptDeck</p>
@@ -48,6 +49,7 @@ const Navbar = () => {
               <Image
                 src={session?.user.image}
                 className="rounded-full"
+                alt="profile picture"
                 width={37}
                 height={37}
               />
@@ -79,6 +81,7 @@ const Navbar = () => {
               className="rounded-full"
               width={37}
               height={37}
+              alt="profile picture"
               onClick={() => setToggleDropdown((prev) => !prev)}
             />
 

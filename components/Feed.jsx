@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import PromptCard from "./PromptCard";
+import { set } from "mongoose";
 
 const PromptCardList = ({ data, handleTagClick }) => {
   return (
@@ -19,15 +20,52 @@ const PromptCardList = ({ data, handleTagClick }) => {
 
 const Feed = () => {
   const [searchText, setSearchText] = useState("");
+  const [filteredPosts, setFilteredPosts] = useState([]);
   const [posts, setPosts] = useState([]);
 
-  const handleSearchChange = (e) => {};
+  const handleSearchChange = (e) => {
+    const text = e.target.value;
+    setSearchText(text);
+
+    if (!text) {
+      setFilteredPosts(posts);
+      return;
+    }
+
+    const lowercasedText = text.toLowerCase();
+    const filtered = posts.filter(
+      (post) =>
+        (post.tag && post.tag.toLowerCase().includes(lowercasedText)) ||
+        (post.creator.username &&
+          post.creator.username.toLowerCase().includes(lowercasedText)) ||
+        (post.prompt && post.prompt.toLowerCase().includes(lowercasedText))
+    );
+
+    setFilteredPosts(filtered);
+  };
+
+  const handleTagClick = (tag) => {
+    setSearchText(tag);
+
+    const lowercasedTag = tag.toLowerCase();
+    const filtered = posts.filter(
+      (post) =>
+        (post.tag && post.tag.toLowerCase().includes(lowercasedTag)) ||
+        (post.creator.username &&
+          post.creator.username.toLowerCase().includes(lowercasedTag)) ||
+        (post.prompt && post.prompt.toLowerCase().includes(lowercasedTag))
+    );
+
+    setFilteredPosts(filtered);
+  };
 
   useEffect(() => {
     const fetchPosts = async () => {
       const response = await fetch("/api/prompt");
       const data = await response.json();
+      console.log(data);
       setPosts(data);
+      setFilteredPosts(data);
     };
 
     fetchPosts();
@@ -45,7 +83,10 @@ const Feed = () => {
           className="search_input peer"
         />
       </form>
-      <PromptCardList data={posts} handleTagClick={() => {}} />
+      <PromptCardList
+        data={searchText ? filteredPosts : posts}
+        handleTagClick={handleTagClick}
+      />
     </section>
   );
 };
