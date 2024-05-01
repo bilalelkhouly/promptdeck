@@ -1,6 +1,7 @@
 import Navbar from "@components/Navbar";
 import Provider from "@components/Provider";
 import "@styles/globals.css";
+import { Suspense } from "react";
 
 export const metadata = {
   title: "PromptDeck",
@@ -21,7 +22,8 @@ const RootLayout = ({ children }) => {
 
           <main className="app">
             <Navbar />
-            {children}
+
+            <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
           </main>
         </Provider>
       </body>
